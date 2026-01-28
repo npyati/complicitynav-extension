@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complicity Navigator</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <img src="../icons/icon-32.png" alt="CN" class="logo">
+      <span class="title">Complicity Navigator</span>
+    </header>
+
+    <!-- Loading State -->
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
+
+    <!-- Entity Found State -->
+    <div id="entity-view" class="view hidden">
+      <div id="entity-header" class="entity-header">
+        <div class="entity-logo-container">
+          <img id="entity-logo" src="" alt="" class="entity-logo hidden">
+          <div id="entity-initial" class="entity-initial"></div>
+        </div>
+        <div class="entity-info">
+          <h2 id="entity-name" class="entity-name"></h2>
+          <p id="entity-industry" class="entity-industry"></p>
+        </div>
+      </div>
+
+      <div id="entity-tally" class="entity-tally">
+        <a id="complicity-count" href="#" target="_blank" class="tally-item complicity">
+          <img src="../icons/kneel-icon.svg" alt="" class="tally-icon">
+          <span class="tally-number">0</span>
+          <span class="tally-label">Complicity</span>
+        </a>
+        <a id="courage-count" href="#" target="_blank" class="tally-item courage">
+          <img src="../icons/stand-icon.svg" alt="" class="tally-icon">
+          <span class="tally-number">0</span>
+          <span class="tally-label">Courage</span>
+        </a>
+      </div>
+
+      <a id="view-profile-link" href="#" target="_blank" class="view-profile-btn">
+        View Full Profile →
+      </a>
+
+      <!-- Issue Campaigns Section -->
+      <div id="issues-section" class="issues-section hidden">
+        <h3 class="issues-header">Take Action</h3>
+        <div id="issues-list" class="issues-list"></div>
+      </div>
+    </div>
+
+    <!-- No Entity State -->
+    <div id="no-entity-view" class="view hidden">
+      <div class="no-entity-content">
+        <div class="no-entity-icon">?</div>
+        <p class="no-entity-text">No tracked organization found for this site.</p>
+        <p class="no-entity-subtext">Know something about this company? Submit an event below.</p>
+      </div>
+    </div>
+
+    <!-- Home State (on CN site) -->
+    <div id="home-view" class="view hidden">
+      <div class="home-content">
+        <div class="home-crowd">
+          <img src="../icons/stand-icon.svg" alt="" class="crowd-icon">
+          <img src="../icons/stand-icon.svg" alt="" class="crowd-icon">
+          <img src="../icons/stand-icon.svg" alt="" class="crowd-icon">
+          <img src="../icons/stand-icon.svg" alt="" class="crowd-icon">
+          <img src="../icons/stand-icon.svg" alt="" class="crowd-icon">
+          <img src="../icons/stand-icon.svg" alt="" class="crowd-icon">
+          <img src="../icons/stand-icon.svg" alt="" class="crowd-icon">
+          <img src="../icons/stand-icon.svg" alt="" class="crowd-icon">
+          <img src="../icons/stand-icon.svg" alt="" class="crowd-icon">
+        </div>
+        <p class="home-text">Thank you.</p>
+        <p class="home-subtext">Let's make a difference.</p>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div id="divider" class="divider hidden"></div>
+
+    <!-- Suggest Section -->
+    <div id="suggest-section" class="suggest-section hidden">
+      <button id="toggle-suggest" class="toggle-suggest-btn">
+        <span class="btn-icon">+</span>
+        Suggest
+      </button>
+
+      <form id="suggest-form" class="suggest-form hidden">
+        <div class="form-info">
+          <p class="form-info-text">From:</p>
+          <p id="source-url" class="source-url"></p>
+        </div>
+
+        <div class="form-group">
+          <textarea
+            id="suggestion"
+            placeholder="What should we know about? Companies to track, news to cover, corrections, ideas..."
+            rows="3"
+          ></textarea>
+        </div>
+
+        <button type="submit" id="suggest-btn" class="suggest-btn">
+          Send
+        </button>
+      </form>
+
+      <!-- Success Message -->
+      <div id="suggest-success" class="suggest-success hidden">
+        <div class="success-icon">✓</div>
+        <p class="success-text">Thanks! You're helping build this.</p>
+      </div>
+
+      <!-- Error Message -->
+      <div id="suggest-error" class="suggest-error hidden">
+        <p class="error-text"></p>
+        <button id="retry-btn" class="retry-btn">Try Again</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <a href="https://complicitynavigator.com" target="_blank">complicitynavigator.com</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
