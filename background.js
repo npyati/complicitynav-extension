@@ -75,12 +75,12 @@ function updateBadge(tabId, entity) {
   let title = `${entity.name} - Complicity Navigator`;
 
   if (complicityCount > 0 && resistanceCount === 0) {
-    // Only complicity actions
+    // Only complicity acts
     badgeText = complicityCount.toString();
     badgeColor = '#FF1744'; // Red
     title = `${entity.name} - ${complicityCount} act${complicityCount > 1 ? 's' : ''} of complicity`;
   } else if (resistanceCount > 0 && complicityCount === 0) {
-    // Only resistance actions
+    // Only resistance acts
     badgeText = resistanceCount.toString();
     badgeColor = '#00C853'; // Green
     title = `${entity.name} - ${resistanceCount} act${resistanceCount > 1 ? 's' : ''} of courage`;
@@ -93,7 +93,7 @@ function updateBadge(tabId, entity) {
     // Entity exists but no actions
     badgeText = '?';
     badgeColor = '#666666';
-    title = `${entity.name} - No actions recorded`;
+    title = `${entity.name} - No acts recorded`;
   }
 
   chrome.action.setBadgeText({ tabId, text: badgeText });
