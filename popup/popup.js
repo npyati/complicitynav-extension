@@ -2,6 +2,21 @@
 
 const API_BASE = 'https://complicitynavigator.com';
 
+// Track if we're in incognito mode
+let isIncognito = false;
+
+// Helper to open links respecting incognito mode
+async function openLink(url) {
+  if (isIncognito) {
+    // In incognito: create tab in current incognito window
+    const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    chrome.tabs.create({ url, windowId: currentTab.windowId });
+  } else {
+    // Regular mode: just open normally
+    chrome.tabs.create({ url });
+  }
+}
+
 // Default message templates
 const DEFAULT_DEMAND_TEMPLATE = '.@{handle} We\'re watching. Your actions matter. Do better. See your record: {companyPageUrl}';
 const DEFAULT_APPLAUD_TEMPLATE = '.@{handle} Thank you for taking a stand. We see you and we support you. {companyPageUrl}';
@@ -42,6 +57,10 @@ let currentTabInfo = null;
 // Initialize popup
 async function init() {
   try {
+    // Check if we're in incognito mode
+    const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    isIncognito = currentTab?.incognito || false;
+
     // Get current tab info from background script
     currentTabInfo = await new Promise((resolve) => {
       chrome.runtime.sendMessage({ type: 'GET_CURRENT_TAB_INFO' }, resolve);
@@ -101,9 +120,21 @@ function showEntityView(entity) {
 
   // Set profile links on tally items and button
   const entityUrl = `${API_BASE}/entity/${entity.id}`;
+
+  // Use click handlers to respect incognito mode
+  const handleEntityLinkClick = (e) => {
+    e.preventDefault();
+    openLink(entityUrl);
+  };
+
   complicityCountEl.href = entityUrl;
+  complicityCountEl.addEventListener('click', handleEntityLinkClick);
+
   courageCountEl.href = entityUrl;
+  courageCountEl.addEventListener('click', handleEntityLinkClick);
+
   viewProfileLinkEl.href = entityUrl;
+  viewProfileLinkEl.addEventListener('click', handleEntityLinkClick);
 
   // Show issue campaigns if available
   if (entity.issueCampaigns && entity.issueCampaigns.length > 0) {
@@ -176,25 +207,30 @@ function showIssueCampaigns(entity) {
     }
 
     // Create info section as a link to the issue page
+    const issueUrl = `${API_BASE}/issues/${issue.slug}`;
     const infoLink = document.createElement('a');
     infoLink.className = 'issue-info';
-    infoLink.href = `${API_BASE}/issues/${issue.slug}`;
-    infoLink.target = '_blank';
-    infoLink.rel = 'noopener noreferrer';
+    infoLink.href = issueUrl;
     infoLink.innerHTML = `
       <div class="issue-title" title="${issue.title}">${issue.title}</div>
       <div class="issue-stance ${stanceClass}">${stanceLabel}</div>
     `;
+    infoLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openLink(issueUrl);
+    });
 
     // Create action button for X/Twitter
+    const message = generateXMessage(buttonType, entity, issue);
+    const xUrl = generateXIntentUrl(message);
     const actionBtn = document.createElement('a');
     actionBtn.className = `issue-action-btn ${buttonType}`;
-    actionBtn.target = '_blank';
-    actionBtn.rel = 'noopener noreferrer';
-
-    const message = generateXMessage(buttonType, entity, issue);
-    actionBtn.href = generateXIntentUrl(message);
+    actionBtn.href = xUrl;
     actionBtn.innerHTML = `${xIconSvg} ${buttonLabel}`;
+    actionBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openLink(xUrl);
+    });
 
     issueItem.appendChild(infoLink);
     issueItem.appendChild(actionBtn);
