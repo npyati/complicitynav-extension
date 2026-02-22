@@ -1,4 +1,7 @@
 # Complicity Navigator Chrome Extension
+
+Test change
+
 A Chrome extension that surfaces Complicity Navigator data while browsing and enables low-friction suggestions.
 
 ## Features
